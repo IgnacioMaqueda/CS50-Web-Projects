@@ -1,0 +1,33 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if active %}
+        <h2>Active Listings</h2>
+    {% elif category %}
+        <h2>{{ category.name }} listings</h2>
+    {% elif watchlist %}
+        <h2>Watchlist</h2>
+    {% else %}
+        <h2>Closed Listings</h2>
+    {% endif %}
+
+    <table class="table">
+    <tbody>
+    {% for listing in listings %}
+        <tr>
+            <th scope="col"><a href="{% url 'listing' listing.id %}"><h5>{{ listing.title }}</h5></a></th>
+            <th scope="col"><h6>Price: ${{ listing.current_price }}</h6></th>
+            <th scope="col"><h6>{{ listing.description }}</h6></th>
+            <th scope="col"><p>{{ listing.category }}</p></th>
+            <th scope="col"><small>{{ listing.datetime }}</small></th>
+            {% if listing.image %}
+                <th scope="col"><img src={{ listing.image }} alt="{{ listing.title }}" height="200"></th>
+            {% endif %}
+        </tr>
+    {% empty %}
+        <div>No listings.</div>
+    {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock %}

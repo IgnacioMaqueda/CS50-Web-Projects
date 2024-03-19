@@ -1,0 +1,85 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{ listing.title }}</h2>
+
+    {% if user.is_authenticated %}
+        {% if in_watchlist %}
+            <div>In Watchlist</div>
+            <form action="{% url 'listing' listing.id %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="submit" name="removing" value="Remove from watchlist">
+            </form>
+        {% else %}
+            <div>Not in watchlist</div>
+            <form action="{% url 'listing' listing.id %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="submit" name="adding" value="Add to watchlist">
+            </form>
+        {% endif %}
+    {% endif %}
+
+    {% if listing.image %}
+        <img src={{ listing.image }} alt="{{ listing.title }}" height="200">
+    {% endif %}
+    <h6>{{ listing.description }}</h6>
+    <h4>${{ listing.current_price }}</h4>
+
+    {{ listing.bids }} bid(s) so far.
+    {% if not listing.closed and user.is_authenticated and user == bid.user %}
+        Your bid is the current bid.
+    {% elif not listing.closed and bid %}
+        The current bid is from {{ bid.user }}
+    {% endif %}
+    {% if user.is_authenticated and not listing.closed and user != listing.created_by %}
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="number" name="price" placeholder="Bid">
+            </div>
+            {% if message %}
+                <div>{{ message }}</div>
+            {% endif %}
+            <input class="btn btn-primary" type="submit" name="bidding" value="Place Bid">
+        </form>
+    {% endif %}
+    <h3>Details</h3>
+    <ul>
+        <li>Listed by: {{ listing.created_by }}</li>
+        <li>Category: {{ listing.category }}</li>
+    </ul>
+    {% if not listing.closed and user.is_authenticated and user == listing.created_by %}
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <input class="btn btn-primary" type="submit" name="closing" value="Close Bid">
+        </form>
+    {% endif %}
+    {% if listing.closed and user == bid.user %}
+        <h1>You won!</h1>
+    {% endif %}
+
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="text" name="text" placeholder="Comment">
+            </div>
+            <input class="btn btn-primary" type="submit" name="commenting" value="Comment">
+        </form>
+    {% endif %}
+
+    <table class="table">
+        <tbody>
+        {% for comment in comments %}
+            <tr>
+                <th scope="col">{{ comment.user }}</th>
+                <th scope="col">{{ comment.text }}</th>
+            </tr>
+        {% empty %}
+            <div>No comments.</div>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
