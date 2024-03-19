@@ -1,0 +1,30 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h1>{{ poster }}</h1>
+    <div class="post">
+        <h4>Following: {{ following }}</h4>
+        <h4>Followers: {{ followers }}</h4>
+    </div>
+    {% if user.is_authenticated and user != poster %}
+    <div class="post">
+        {% if followed %}
+            <div>Following</div>
+            <form action="{% url 'poster' poster %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="submit" name="unfollowing" value="Unfollow">
+            </form>
+        {% else %}
+            <div>Not following</div>
+            <form action="{% url 'poster' poster %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="submit" name="following" value="Follow">
+            </form>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if user.is_authenticated and user == poster %}
+        {% include 'network/new_post.html' %}
+    {% endif %}
+    {% include 'network/list_posts.html' %}
+{% endblock %}

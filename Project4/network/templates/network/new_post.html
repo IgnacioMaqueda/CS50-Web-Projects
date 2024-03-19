@@ -1,0 +1,12 @@
+{% if user.is_authenticated %}
+    <div class="post">
+        <h4>New Post</h4>
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea class="form-control" id="compose-body" placeholder="Content" name="text"></textarea>
+                <input class="btn btn-primary" type="submit" name="posting" value="Post">
+            </div>
+        </form>
+    </div>
+{% endif %}
