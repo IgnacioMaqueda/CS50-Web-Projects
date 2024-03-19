@@ -1,0 +1,29 @@
+textarea {
+    min-height: 400px;
+}
+
+.readmail {
+    background-color: lightgray;
+    padding: 20px;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    margin-bottom: 10px;
+    /*animation-name: hide;*/
+    /*animation-duration: 2s;*/
+    /*animation-fill-mode: forwards;*/
+    /*animation-play-state: paused;*/
+}
+
+.unreadmail {
+    background-color: white;
+    padding: 20px;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    margin-bottom: 10px;
+    /*animation-name: hide;*/
+    /*animation-duration: 2s;*/
+    /*animation-fill-mode: forwards;*/
+    /*animation-play-state: paused;*/
+}
